@@ -14,11 +14,4 @@ if DATABASE_URL is not None:
     }
 
 
-# {
-#             "ENGINE": "django.db.backends.postgresql",
-#             "NAME": "neondb",
-#             "USER": "hodaeyfha",
-#             "PASSWORD": "YfASQ2Wjab0t",
-#             "HOST": "ep-hidden-unit-978731.us-east-2.aws.neon.tech",
-#             "PORT": "5432",
-#         }
+
