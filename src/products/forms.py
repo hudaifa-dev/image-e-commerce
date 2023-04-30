@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
-
+from django.forms import modelformset_factory, inlineformset_factory
 # from .forms import ProductForm
 
 
 from django import forms
-from .models import Product
+from .models import Product, ProductAttachment
 
 input_css_class = "form-control"
 
@@ -21,12 +21,48 @@ class ProductForm(forms.ModelForm):
             self.fields[field].widget.attrs["class"] = input_css_class
 
 
-# def create_product(request):
-#     if request.method == 'POST':
-#         form = ProductForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('product_list')
-#     else:
-#         form = ProductForm()
-#     return render(request, 'create_product.html', {'form': form})
+class ProductUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ["image", 'name', 'handle', 'price']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self.fields['name'].widget.attrs['placeholder'] = "Your name"
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = input_css_class
+
+
+
+class ProductAttachmentForm(forms.ModelForm):
+    class Meta:
+        model = ProductAttachment
+        fields = ["file", 'name', 'is_free', 'active']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self.fields['name'].widget.attrs['placeholder'] = "Your name"
+        for field in self.fields:
+            if field in ['is_free', 'active']:
+                continue
+            self.fields[field].widget.attrs['class'] = input_css_class
+
+
+ProductAttachmentModelFormSet = modelformset_factory(
+    ProductAttachment,
+    form=ProductAttachmentForm,
+    fields = ['file', 'name','is_free', 'active'],
+    extra=0,
+    can_delete=True
+)
+
+ProductAttachmentInlineFormSet = inlineformset_factory(
+    Product,
+    ProductAttachment,
+    form = ProductAttachmentForm,
+    formset = ProductAttachmentModelFormSet,
+    fields = ['file', 'name','is_free', 'active'],
+    extra=0,
+    can_delete=True
+)
+

@@ -1,0 +1,3 @@
+#!/Users/hudaifa/Documents/Backend/image-e-commerce/venv/bin/python
+from numba.pycc import main
+main()
